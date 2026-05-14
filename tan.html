@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAN — Game Developer</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --white: #ffffff;
+  --off-white: #f5f4f0;
+  --light: #ebebeb;
+  --mid: #999;
+  --dark: #1a1a1a;
+  --black: #0d0d0d;
+  --serif: 'Montserrat', sans-serif;
+  --sans: 'Montserrat', sans-serif;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--sans);
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.5rem 3rem;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--light);
+  animation: fadeDown 0.6s ease both;
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  color: var(--black);
+  text-decoration: none;
+}
+nav ul { list-style: none; display: flex; gap: 2.5rem; }
+nav a {
+  font-size: 0.78rem; font-weight: 400;
+  color: var(--mid); text-decoration: none;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  transition: color 0.2s;
+}
+nav a:hover { color: var(--black); }
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 8rem 3rem 4rem;
+  gap: 4rem;
+  border-bottom: 1px solid var(--light);
+}
+.hero-left { max-width: 580px; }
+
+.hero-eyebrow {
+  font-size: 0.72rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 1.75rem;
+  opacity: 0; animation: fadeUp 0.7s 0.2s ease both;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block; width: 24px; height: 1px;
+  background: var(--mid);
+}
+
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(3.2rem, 6vw, 5.5rem);
+  font-weight: 400; line-height: 1.06;
+  letter-spacing: -0.02em;
+  opacity: 0; animation: fadeUp 0.8s 0.35s ease both;
+}
+h1 em { font-style: normal; font-weight: 300; color: var(--mid); }
+
+.hero-desc {
+  margin-top: 2rem; font-size: 0.95rem;
+  line-height: 1.85; color: #555; max-width: 420px;
+  opacity: 0; animation: fadeUp 0.8s 0.5s ease both;
+}
+
+.hero-actions {
+  margin-top: 2.5rem;
+  display: flex; gap: 1rem; align-items: center;
+  opacity: 0; animation: fadeUp 0.8s 0.65s ease both;
+}
+
+.btn {
+  display: inline-block; padding: 0.75rem 2rem;
+  font-family: var(--sans); font-size: 0.78rem;
+  font-weight: 500; letter-spacing: 0.08em;
+  text-transform: uppercase; text-decoration: none;
+  transition: background 0.25s, color 0.25s, transform 0.2s;
+  cursor: pointer; border: none;
+}
+.btn-dark { background: var(--black); color: var(--white); }
+.btn-dark:hover { background: var(--dark); transform: translateY(-2px); }
+.btn-outline { background: transparent; color: var(--black); border: 1px solid var(--light); }
+.btn-outline:hover { border-color: var(--black); transform: translateY(-2px); }
+
+.hero-right {
+  display: flex; flex-direction: column; gap: 1px;
+  opacity: 0; animation: fadeIn 1s 0.8s ease both;
+}
+
+.hero-stat {
+  padding: 2rem; background: var(--off-white);
+  display: flex; flex-direction: column; gap: 0.25rem;
+  transition: background 0.2s;
+}
+.hero-stat:hover { background: var(--light); }
+
+.hero-stat-num {
+  font-family: var(--serif); font-size: 2.4rem;
+  font-weight: 400; line-height: 1;
+}
+.hero-stat-label {
+  font-size: 0.72rem; font-weight: 400;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--mid);
+}
+
+/* SECTIONS */
+section { padding: 6rem 3rem; }
+
+.section-header {
+  display: flex; align-items: baseline;
+  justify-content: space-between;
+  border-top: 1px solid var(--light);
+  padding-top: 1.25rem; margin-bottom: 4rem;
+}
+.section-num {
+  font-size: 0.72rem; font-weight: 500;
+  letter-spacing: 0.15em; color: var(--mid); text-transform: uppercase;
+}
+h2 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 400; line-height: 1.15;
+}
+
+/* ABOUT */
+#about { background: var(--off-white); border-bottom: 1px solid var(--light); }
+
+.about-layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6rem; align-items: start;
+}
+.about-body p {
+  font-size: 0.95rem; line-height: 1.9;
+  color: #444; margin-bottom: 1.25rem;
+}
+.about-body strong { color: var(--black); font-weight: 500; }
+
+.availability {
+  margin-top: 2rem; display: inline-flex;
+  align-items: center; gap: 0.6rem;
+  font-size: 0.72rem; font-weight: 500;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--black); padding: 0.6rem 1rem;
+  border: 1px solid var(--black);
+}
+.dot {
+  width: 6px; height: 6px; background: var(--black);
+  border-radius: 50%; animation: blink 1.8s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; } 50% { opacity: 0.2; }
+}
+
+.about-details { display: flex; flex-direction: column; gap: 1px; }
+
+.detail-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.1rem 1.25rem; background: var(--white);
+  font-size: 0.82rem; transition: background 0.2s;
+}
+.detail-row:hover { background: var(--light); }
+.detail-row span:first-child {
+  color: var(--mid); text-transform: uppercase;
+  letter-spacing: 0.08em; font-size: 0.72rem;
+}
+.detail-row span:last-child { color: var(--black); font-weight: 500; }
+
+/* SKILLS */
+#skills { background: var(--white); border-bottom: 1px solid var(--light); }
+
+.skills-cols {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--light);
+  border: 1px solid var(--light);
+}
+.skill-col { background: var(--white); padding: 2rem; }
+
+.skill-col-title {
+  font-size: 0.7rem; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 1.75rem;
+  padding-bottom: 1rem; border-bottom: 1px solid var(--light);
+}
+.skill-item { margin-bottom: 1.25rem; }
+.skill-row {
+  display: flex; justify-content: space-between;
+  font-size: 0.85rem; margin-bottom: 0.5rem;
+}
+.skill-row span:first-child { color: var(--black); }
+.skill-row span:last-child { color: var(--mid); font-size: 0.72rem; }
+
+.skill-track { height: 1px; background: var(--light); position: relative; }
+.skill-prog {
+  position: absolute; top: 0; left: 0; height: 100%;
+  background: var(--black);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 1.1s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* CONTACT */
+#contact { background: var(--white); }
+
+.contact-layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6rem; align-items: start;
+}
+.contact-left p {
+  font-size: 0.9rem; color: #555;
+  line-height: 1.85; max-width: 380px; margin-bottom: 2.5rem;
+}
+.contact-links { display: flex; flex-direction: column; gap: 1px; }
+
+.c-link {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 1.25rem; background: var(--off-white);
+  color: var(--black); text-decoration: none;
+  font-size: 0.82rem; transition: background 0.22s, color 0.22s;
+}
+.c-link:hover { background: var(--black); color: var(--white); }
+.c-link-label {
+  font-size: 0.65rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--mid); margin-bottom: 0.15rem;
+  transition: color 0.22s;
+}
+.c-link:hover .c-link-label { color: rgba(255,255,255,0.5); }
+
+.contact-form { display: flex; flex-direction: column; gap: 1px; }
+
+.form-field { display: flex; flex-direction: column; }
+.form-field label {
+  font-size: 0.65rem; font-weight: 500;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--mid); padding: 0.75rem 1.25rem 0;
+  background: var(--off-white);
+}
+.form-field input, .form-field textarea {
+  font-family: var(--sans); font-size: 0.88rem;
+  font-weight: 300; color: var(--black);
+  background: var(--off-white); border: none;
+  border-bottom: 1px solid transparent;
+  padding: 0.4rem 1.25rem 0.85rem;
+  outline: none; resize: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.form-field input:focus, .form-field textarea:focus {
+  border-bottom-color: var(--black); background: var(--light);
+}
+.form-field textarea { height: 130px; }
+
+.form-submit {
+  padding: 1.1rem; background: var(--black); color: var(--white);
+  font-family: var(--sans); font-size: 0.78rem; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  border: none; cursor: pointer; margin-top: 1px;
+  transition: background 0.2s;
+}
+.form-submit:hover { background: var(--dark); }
+
+/* FOOTER */
+footer {
+  padding: 1.5rem 3rem; border-top: 1px solid var(--light);
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.72rem; color: var(--mid); letter-spacing: 0.04em;
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+.d1 { transition-delay: 0.1s; }
+.d2 { transition-delay: 0.2s; }
+.d3 { transition-delay: 0.3s; }
+
+@media (max-width: 860px) {
+  nav { padding: 1.25rem 1.5rem; }
+  nav ul { gap: 1.5rem; }
+  #hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 3rem; }
+  .hero-right { display: grid; grid-template-columns: 1fr 1fr; }
+  section { padding: 4rem 1.5rem; }
+  .about-layout, .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+  .skills-cols { grid-template-columns: 1fr; }
+  footer { padding: 1.25rem 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">TAN</a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">Game Developer & Web Developer</p>
+    <h1>
+      Crafting games<br>
+      <em>&amp; digital</em><br>
+      experiences.
+    </h1>
+    <p class="hero-desc">
+      Saya membangun game di Unity dengan C# dan membuat web menggunakan
+      HTML, CSS, serta Python. Setiap proyek dimulai dari ide sederhana
+      dan dieksekusi dengan detail.
+    </p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-dark">Lihat Proyek</a>
+      <a href="#contact" class="btn btn-outline">Hubungi Saya</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-stat">
+      <span class="hero-stat-num">5+</span>
+      <span class="hero-stat-label">Game Projects</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">3+</span>
+      <span class="hero-stat-label">Tahun Experience</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">10+</span>
+      <span class="hero-stat-label">Web Projects</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">∞</span>
+      <span class="hero-stat-label">Coffee Consumed</span>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01 — About</span>
+    <h2>Siapa saya</h2>
+  </div>
+  <div class="about-layout">
+    <div class="about-body reveal">
+      <p>Saya adalah seorang <strong>game developer</strong> yang passionate dalam membangun pengalaman interaktif. Dengan Unity dan C#, saya merancang sistem gameplay, AI sederhana, hingga optimisasi performa.</p>
+      <p>Di luar game, saya mengerjakan proyek web menggunakan <strong>HTML, CSS, dan Python</strong> — fokus pada struktur yang bersih, desain yang fungsional, dan kode yang mudah dipelihara.</p>
+      <p>Saya percaya bahwa hal terbaik lahir dari perhatian terhadap detail kecil, iterasi yang konsisten, dan rasa ingin tahu yang tidak pernah berhenti.</p>
+      <div class="availability">
+        <span class="dot"></span>
+        Available for freelance
+      </div>
+    </div>
+    <div class="about-details reveal d2">
+      <div class="detail-row"><span>Lokasi</span><span>Indonesia</span></div>
+      <div class="detail-row"><span>Fokus Utama</span><span>Game Development</span></div>
+      <div class="detail-row"><span>Engine</span><span>Unity 2D / 3D</span></div>
+      <div class="detail-row"><span>Bahasa</span><span>C#, Python, HTML/CSS</span></div>
+      <div class="detail-row"><span>Status</span><span>Open to Work</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-header reveal">
+    <span class="section-num">02 — Skills</span>
+    <h2>Tech stack</h2>
+  </div>
+  <div class="skills-cols reveal">
+    <div class="skill-col">
+      <div class="skill-col-title">Game Dev</div>
+      <div class="skill-item">
+        <div class="skill-row"><span>Unity</span><span>90%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.9"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-row"><span>C#</span><span>85%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.85"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-row"><span>Game Design</span><span>80%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.8"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-row"><span>Physics & Animation</span><span>75%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.75"></div></div>
+      </div>
+    </div>
+    <div class="skill-col">
+      <div class="skill-col-title">Programming</div>
+      <div class="skill-item">
+        <div class="skill-row"><span>Python</span><span>85%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.85"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-row"><span>OOP & Patterns</span><span>80%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.8"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-row"><span>Algorithm & DS</span><span>70%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.7"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-row"><span>Version Control</span><span>75%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.75"></div></div>
+      </div>
+    </div>
+    <div class="skill-col">
+      <div class="skill-col-title">Web Dev</div>
+      <div class="skill-item">
+        <div class="skill-row"><span>HTML5</span><span>90%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.9"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-row"><span>CSS3</span><span>85%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.85"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-row"><span>Responsive Design</span><span>80%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.8"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-row"><span>JavaScript</span><span>65%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.65"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-header reveal">
+    <span class="section-num">03 — Contact</span>
+  </div>
+  <div class="contact-layout">
+    <div class="reveal">
+      <p>Punya project game atau web yang menarik? Saya terbuka untuk freelance, kolaborasi, maupun diskusi santai seputar game dev.</p>
+      <div class="contact-links">
+        <a href="mailto:email@kamu.com" class="c-link">
+          <div><div class="c-link-label">Email</div>email@kamu.com</div><span>↗</span>
+        </a>
+        <a href="https://github.com/username" class="c-link" target="_blank">
+          <div><div class="c-link-label">GitHub</div>github.com/username</div><span>↗</span>
+        </a>
+        <a href="https://linkedin.com/in/username" class="c-link" target="_blank">
+          <div><div class="c-link-label">LinkedIn</div>linkedin.com/in/username</div><span>↗</span>
+        </a>
+        <a href="https://itch.io/username" class="c-link" target="_blank">
+          <div><div class="c-link-label">itch.io</div>itch.io/username</div><span>↗</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 TAN</span>
+  <span>Game & Web Developer — Indonesia</span>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('visible');
+    e.target.querySelectorAll('.skill-prog').forEach(p => {
+      p.style.transform = `scaleX(${p.dataset.w})`;
+    });
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => io.observe(el));
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = e.target.querySelector('.form-submit');
+  btn.textContent = 'Terkirim ✓';
+  btn.style.background = '#333';
+  setTimeout(() => {
+    btn.textContent = 'Kirim Pesan →';
+    btn.style.background = '';
+    e.target.reset();
+  }, 3000);
+}
+
+const secs = document.querySelectorAll('section[id]');
+const navAs = document.querySelectorAll('nav a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  secs.forEach(s => { if (scrollY >= s.offsetTop - 180) cur = s.id; });
+  navAs.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + cur ? '#0d0d0d' : '';
+  });
+});
+</script>
+</body>
+</html>
