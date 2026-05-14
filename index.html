@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TAN</title>
+<title>TAN — Game Developer</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -26,7 +26,52 @@ body {
   font-family: var(--sans);
   font-weight: 300;
   overflow-x: hidden;
+  transition: background 0.35s ease, color 0.35s ease;
 }
+
+/* DARK MODE */
+body.dark {
+  --white: #0d0d0d;
+  --off-white: #161616;
+  --light: #2a2a2a;
+  --mid: #666;
+  --dark: #e0e0e0;
+  --black: #f0f0f0;
+}
+
+body.dark nav { background: rgba(13,13,13,0.92); }
+body.dark .about-body p { color: #aaa; }
+body.dark .detail-row { background: #1a1a1a; }
+body.dark .detail-row:hover { background: #222; }
+body.dark .skill-col { background: #0d0d0d; }
+body.dark .c-link { background: #161616; color: #f0f0f0; }
+body.dark .c-link:hover { background: #f0f0f0; color: #0d0d0d; }
+body.dark .c-link:hover .c-link-label { color: rgba(0,0,0,0.5); }
+body.dark .hero-stat { background: #161616; }
+body.dark .hero-stat:hover { background: #1e1e1e; }
+body.dark .contact-left p { color: #aaa; }
+
+/* TOGGLE BUTTON */
+.theme-toggle {
+  width: 40px; height: 22px;
+  background: var(--light);
+  border-radius: 999px;
+  border: 1px solid var(--mid);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.3s, border-color 0.3s;
+  flex-shrink: 0;
+}
+.theme-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--black);
+  transition: transform 0.3s, background 0.3s;
+}
+body.dark .theme-toggle::after { transform: translateX(18px); }
 
 /* NAV */
 nav {
@@ -336,6 +381,7 @@ footer {
     <li><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark/light mode"></button></li>
   </ul>
 </nav>
 
@@ -413,19 +459,19 @@ footer {
       <div class="skill-col-title">Game Dev</div>
       <div class="skill-item">
         <div class="skill-row"><span>Unity</span><span>10%</span></div>
-        <div class="skill-track"><div class="skill-prog" data-w="0.9"></div></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.1"></div></div>
       </div>
       <div class="skill-item">
         <div class="skill-row"><span>C#</span><span>8%</span></div>
-        <div class="skill-track"><div class="skill-prog" data-w="0.85"></div></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.08"></div></div>
       </div>
       <div class="skill-item">
         <div class="skill-row"><span>Game Design</span><span>2%</span></div>
-        <div class="skill-track"><div class="skill-prog" data-w="0.8"></div></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.02"></div></div>
       </div>
       <div class="skill-item">
         <div class="skill-row"><span>Physics & Animation</span><span>1%</span></div>
-        <div class="skill-track"><div class="skill-prog" data-w="0.75"></div></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.01"></div></div>
       </div>
     </div>
     <div class="skill-col">
@@ -436,34 +482,34 @@ footer {
       </div>
       <div class="skill-item">
         <div class="skill-row"><span>OOP & Patterns</span><span>2%</span></div>
-        <div class="skill-track"><div class="skill-prog" data-w="0.8"></div></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.02"></div></div>
       </div>
       <div class="skill-item">
         <div class="skill-row"><span>Algorithm & DS</span><span>4%</span></div>
-        <div class="skill-track"><div class="skill-prog" data-w="0.7"></div></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.04"></div></div>
       </div>
       <div class="skill-item">
         <div class="skill-row"><span>Version Control</span><span>1%</span></div>
-        <div class="skill-track"><div class="skill-prog" data-w="0.75"></div></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.01"></div></div>
       </div>
     </div>
     <div class="skill-col">
       <div class="skill-col-title">Web Dev</div>
       <div class="skill-item">
         <div class="skill-row"><span>HTML5</span><span>87%</span></div>
-        <div class="skill-track"><div class="skill-prog" data-w="0.9"></div></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.87"></div></div>
       </div>
       <div class="skill-item">
-        <div class="skill-row"><span>CSS3</span><span>70%</span></div>
-        <div class="skill-track"><div class="skill-prog" data-w="0.85"></div></div>
+        <div class="skill-row"><span>CSS3</span><span>30%</span></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.3"></div></div>
       </div>
       <div class="skill-item">
         <div class="skill-row"><span>Responsive Design</span><span>0%</span></div>
-        <div class="skill-track"><div class="skill-prog" data-w="0.8"></div></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0"></div></div>
       </div>
       <div class="skill-item">
         <div class="skill-row"><span>JavaScript</span><span>3%</span></div>
-        <div class="skill-track"><div class="skill-prog" data-w="0.65"></div></div>
+        <div class="skill-track"><div class="skill-prog" data-w="0.03"></div></div>
       </div>
     </div>
   </div>
@@ -475,19 +521,13 @@ footer {
   </div>
   <div class="contact-layout">
     <div class="reveal">
-      <p></p>
+      <p>Punya project game atau web yang menarik? Saya terbuka untuk freelance, kolaborasi, maupun diskusi santai seputar game dev.</p>
       <div class="contact-links">
         <a href="mailto:tannmediaa@gmail.com" class="c-link">
           <div><div class="c-link-label">Email</div>tannmediaa@gmail.com</div><span>↗</span>
         </a>
         <a href="https://github.com/tristankebab" class="c-link" target="_blank">
           <div><div class="c-link-label">GitHub</div>github.com/tristankebab</div><span>↗</span>
-        </a>
-        <a href="https://linkedin.com/in/username" class="c-link" target="_blank">
-          <div><div class="c-link-label">LinkedIn</div>linkedin.com/in/username</div><span>↗</span>
-        </a>
-        <a href="https://itch.io/username" class="c-link" target="_blank">
-          <div><div class="c-link-label">itch.io</div>itch.io/username</div><span>↗</span>
         </a>
       </div>
     </div>
@@ -501,6 +541,12 @@ footer {
 </footer>
 
 <script>
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+  localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+}
+if (localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+
 const reveals = document.querySelectorAll('.reveal');
 const io = new IntersectionObserver(entries => {
   entries.forEach(e => {
