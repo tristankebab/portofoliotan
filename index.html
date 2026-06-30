@@ -522,7 +522,7 @@
   <div class="section-inner">
     <div class="reveal">
       <div class="section-label">💰 Sistem Ekonomi</div>
-      <div class="section-title">Economy</div>
+      <div class="section-title">Economy yang Hidup & Seru</div>
       <p class="section-sub">Pasar player-driven yang sepenuhnya dikontrol komunitas. Harga naik turun tergantung supply dan demand.</p>
     </div>
     <div class="eco-grid">
@@ -745,33 +745,56 @@
     version.innerHTML = '<div class="ssw-skeleton" style="width:80px"></div>';
     motd.innerHTML = '<div class="ssw-skeleton"></div>';
 
-    try {
+    // Coba mcstatus.io dulu (cache pendek, lebih real-time), fallback ke mcsrvstat.us
+    async function tryMcStatusIO() {
+      const res = await fetch('https://api.mcstatus.io/v2/status/java/play.survnest.online:25522');
+      const data = await res.json();
+      if (!data.online) throw { offline: true };
+      return {
+        online: true,
+        playersOnline: data.players?.online ?? 0,
+        playersMax: data.players?.max ?? '?',
+        version: data.version?.name_clean || data.version?.name || 'Unknown',
+        motd: data.motd?.clean || 'SurvNest MC'
+      };
+    }
+
+    async function tryMcSrvStat() {
       const res = await fetch('https://api.mcsrvstat.us/3/play.survnest.online:25522');
       const data = await res.json();
+      if (!data.online) throw { offline: true };
+      return {
+        online: true,
+        playersOnline: data.players?.online ?? 0,
+        playersMax: data.players?.max ?? '?',
+        version: data.version || 'Unknown',
+        motd: data.motd?.clean?.join(' ') || 'SurvNest MC'
+      };
+    }
 
-      if (data.online) {
-        badge.className = 'ssw-badge online';
-        dot.className = 'online-dot online';
-        text.textContent = 'Online';
-
-        players.textContent = `${data.players?.online ?? 0} / ${data.players?.max ?? '?'}`;
-        version.textContent = data.version || 'Unknown';
-        motd.textContent = data.motd?.clean?.join(' ') || 'SurvNest MC';
-      } else {
-        badge.className = 'ssw-badge offline';
-        dot.className = 'online-dot offline';
-        text.textContent = 'Offline / Maintenance';
-        players.textContent = '-';
-        version.textContent = '-';
-        motd.textContent = 'Server sedang tidak aktif. Coba lagi nanti.';
+    try {
+      let result;
+      try {
+        result = await tryMcStatusIO();
+      } catch (e1) {
+        // fallback ke API kedua sebelum dianggap offline beneran
+        result = await tryMcSrvStat();
       }
+
+      badge.className = 'ssw-badge online';
+      dot.className = 'online-dot online';
+      text.textContent = 'Online';
+      players.textContent = `${result.playersOnline} / ${result.playersMax}`;
+      version.textContent = result.version;
+      motd.textContent = result.motd;
+
     } catch (err) {
       badge.className = 'ssw-badge offline';
       dot.className = 'online-dot offline';
-      text.textContent = 'Gagal Cek Status';
+      text.textContent = 'Offline / Maintenance';
       players.textContent = '-';
       version.textContent = '-';
-      motd.textContent = 'Tidak bisa terhubung ke API status server.';
+      motd.textContent = 'Server sedang tidak aktif atau tidak terdeteksi.';
     }
 
     lastCheck.textContent = 'Terakhir dicek: ' + new Date().toLocaleTimeString('id-ID');
@@ -779,7 +802,7 @@
 
   // Jalankan saat load + auto refresh tiap 60 detik
   checkServer();
-  setInterval(checkServer, 60000);
+  setInterval(checkServer, 20000);
 
   // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
