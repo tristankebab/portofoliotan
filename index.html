@@ -727,6 +727,60 @@
     setTimeout(() => toast.classList.remove('show'), 1800);
   }
 
+  // ── LIVE SERVER STATUS CHECKER ──
+  async function checkServer() {
+    const badge = document.getElementById('statusBadge');
+    const dot = document.getElementById('statusDot');
+    const text = document.getElementById('statusText');
+    const players = document.getElementById('statusPlayers');
+    const version = document.getElementById('statusVersion');
+    const motd = document.getElementById('statusMotd');
+    const lastCheck = document.getElementById('statusLastCheck');
+
+    // reset ke "checking"
+    badge.className = 'ssw-badge checking';
+    dot.className = 'online-dot checking';
+    text.textContent = 'Mengecek...';
+    players.innerHTML = '<div class="ssw-skeleton" style="width:60px"></div>';
+    version.innerHTML = '<div class="ssw-skeleton" style="width:80px"></div>';
+    motd.innerHTML = '<div class="ssw-skeleton"></div>';
+
+    try {
+      const res = await fetch('https://api.mcsrvstat.us/3/play.survnest.online:25522');
+      const data = await res.json();
+
+      if (data.online) {
+        badge.className = 'ssw-badge online';
+        dot.className = 'online-dot online';
+        text.textContent = 'Online';
+
+        players.textContent = `${data.players?.online ?? 0} / ${data.players?.max ?? '?'}`;
+        version.textContent = data.version || 'Unknown';
+        motd.textContent = data.motd?.clean?.join(' ') || 'SurvNest MC';
+      } else {
+        badge.className = 'ssw-badge offline';
+        dot.className = 'online-dot offline';
+        text.textContent = 'Offline / Maintenance';
+        players.textContent = '-';
+        version.textContent = '-';
+        motd.textContent = 'Server sedang tidak aktif. Coba lagi nanti.';
+      }
+    } catch (err) {
+      badge.className = 'ssw-badge offline';
+      dot.className = 'online-dot offline';
+      text.textContent = 'Gagal Cek Status';
+      players.textContent = '-';
+      version.textContent = '-';
+      motd.textContent = 'Tidak bisa terhubung ke API status server.';
+    }
+
+    lastCheck.textContent = 'Terakhir dicek: ' + new Date().toLocaleTimeString('id-ID');
+  }
+
+  // Jalankan saat load + auto refresh tiap 60 detik
+  checkServer();
+  setInterval(checkServer, 60000);
+
   // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const obs = new IntersectionObserver(entries => {
